@@ -521,9 +521,8 @@ long
 cos_syscall_handler(int syscall_num, long a, long b, long c, long d, long e, long f)
 {
 	assert(syscall_num <= SYSCALL_NUM_MAX);
-	//printc("Making syscall %d\n", syscall_num);
-	//printc("args a: %ld, b: %ld, c: %ld, d: %ld, e: %ld, f: %ld\n",
-	//	a, b, c, d, e, f);
+	printc("Making syscall %d\n", syscall_num);
+	printc("args a: %ld, b: %ld, c: %ld, d: %ld, e: %ld, f: %ld\n", a, b, c, d, e, f);
 	if (!cos_syscalls[syscall_num]){
 		printc("WARNING: Thread %u calling unimplemented system call %d\n", cos_thdid(), syscall_num);
 		assert(0);

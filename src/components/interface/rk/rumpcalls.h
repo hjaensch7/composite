@@ -117,11 +117,18 @@ struct cos_rumpcalls
 	void   (*rump_cpu_sched_yield)(void);
 	void   (*rump_cpu_sched_exit)(void);
 	void   (*rump_cpu_sched_set_prio)(int prio);
+
+	void*  (*rump_musl_malloc)(size_t size, size_t alignment);
+	void   (*rump_musl_free)(void *ptr);
 };
 
 void* rump_cos_malloc(size_t size);
 void* rump_cos_calloc(size_t nmemb, size_t _size);
 void rump_cos_free(void *ptr);
+
+//Cos Side functions ???
+void *cos_musl_malloc(size_t size, size_t alignment);
+void cos_musl_free(void *ptr);
 
 /* Mapping the functions from rumpkernel to composite */
 void cos2rump_setup(void);

@@ -309,6 +309,7 @@ static void trim(struct chunk *self, size_t n)
 
 void *malloc(size_t n)
 {
+	printf("malloc: size %d\n",n);
 	struct chunk *c;
 	int i, j;
 
@@ -316,6 +317,7 @@ void *malloc(size_t n)
 
 	if (n > MMAP_THRESHOLD) {
 		size_t len = n + OVERHEAD + PAGE_SIZE - 1 & -PAGE_SIZE;
+		printf("mmap being called\n");
 		char *base = __mmap(0, len, PROT_READ|PROT_WRITE,
 			MAP_PRIVATE|MAP_ANONYMOUS, -1, 0);
 		if (base == (void *)-1) return 0;

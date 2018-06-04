@@ -71,6 +71,9 @@ cos2rump_setup(void)
 	crcalls.rump_cpu_sched_exit		= rk_rump_thd_exit;
 	crcalls.rump_cpu_sched_set_prio		= rk_curr_thd_set_prio;
 
+	crcalls.rump_musl_malloc = cos_musl_malloc;
+	crcalls.rump_musl_free = cos_musl_free;
+
 	return;
 }
 
@@ -181,6 +184,23 @@ rump_bmk_memsize_init(void)
 	printc("bmk_memsize: %lu\n", bmk_memsize);
 }
 
+void *
+cos_musl_malloc(size_t size, size_t alignment)
+{
+	printc("%s: Size: %d| Alignment: %d\n",__func__, size, alignment);
+	void * retval = memalign(alignment, size);
+	printc("%s: retval: %p\n", __func__, retval);
+	return retval;
+}
+
+void
+cos_musl_free(void *ptr)
+{
+	printc("cos_musl_free");
+	free(ptr);
+}
+
+
 void
 cos_memfree(void *cp)
 {
@@ -192,7 +212,7 @@ cos_memcalloc(size_t n, size_t size)
 {
 
 	printc("cos_memcalloc was called\n");
-	while(1);
+	//while(1);
 
 	void *rv;
 	size_t tot = n * size;
@@ -208,7 +228,7 @@ void *
 cos_memalloc(size_t nbytes, size_t align)
 {
 	printc("cos_memalloc was called\n");
-	while(1);
+	//while(1);
 
 	void *rv;
 
