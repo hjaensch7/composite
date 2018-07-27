@@ -7,6 +7,7 @@
 #include "io.h"
 #include "../../../../kernel/include/chal.h"
 #include "pci_lib.h"
+#include "cos_pci.h"
 #include <llprint.h>
 
 #define DEBUG 1
@@ -44,6 +45,17 @@ cos_pci_print(void)
     }
 }
 
+u32_t
+get_config_data(u32_t bus, u32_t dev, u32_t func, int reg)
+{
+	for(int i=0; i < PCI_DEVICE_NUM; i++) {
+		if(devices[i].bus == bus)
+			if(devices[i].dev == dev)
+				if(devices[i].func == func)
+						return devices[i].data[reg];
+	}
+	return 0;
+}
 /* int */
 /* pci_vendor_populate(u16_t *vendors, size_t num_devices, struct pci_device **devices_p) */
 /* { */
@@ -76,6 +88,8 @@ cos_pci_scan(void)
 				devices[dev_num].bus       = (u32_t)i;
 				devices[dev_num].dev       = (u32_t)j;
 				devices[dev_num].func      = (u32_t)f;
+				printc("bus %u dev %u fun %u ", devices[dev_num].bus, devices[dev_num].dev, devices[dev_num].func);
+				print_bits(devices[dev_num].data[0]);
 				devices[dev_num].vendor    = (u16_t)PCI_VENDOR_ID(devices[dev_num].data[0]);
 				devices[dev_num].device    = (u16_t)PCI_DEVICE_ID(devices[dev_num].data[0]);
 				devices[dev_num].classcode = (u8_t)PCI_CLASS_ID(devices[dev_num].data[2]);

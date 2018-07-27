@@ -70,6 +70,7 @@ void *cos_map_phys_to_virt(void *paddr, unsigned int size);
 u32_t cos_pci_read_config(u32_t bus, u32_t dev, u32_t func, u32_t reg);
 void cos_pci_write_config(u32_t bus, u32_t dev, u32_t func, u32_t reg, u32_t v);
 void *cos_map_virt_to_phys(void *addr);
+u32_t get_config_data(u32_t bus, u32_t dev, u32_t func, int reg);
 
 #endif /* PCI_H */
 
