@@ -123,9 +123,13 @@ cos_pci_scan(void)
 				devices[dev_num].header    = (u8_t)PCI_HEADER(devices[dev_num].data[3]);
 				for(k=0; k<PCI_BAR_NUM; k++) {
 						devices[dev_num].bar[k].raw = devices[dev_num].data[4+k];
+						//Write mask
 						cos_pci_write_config(devices[dev_num].bus, devices[dev_num].dev, devices[dev_num].func, ((4+k) << 2), PCI_BITMASK_32);
+						//Read size value
 						devices[dev_num].bar[k].alt = cos_pci_read_config(devices[dev_num].bus, devices[dev_num].dev, devices[dev_num].func, ((4+k) << 2));
+						//Write original value back
 						cos_pci_write_config(devices[dev_num].bus, devices[dev_num].dev, devices[dev_num].func, ((4+k) << 2), devices[dev_num].bar[k].raw);
+						//FIXME confirm that original val was written back and assert if not
 				}
 				dev_num++;
 			}

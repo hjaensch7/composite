@@ -7,7 +7,7 @@
 #define PCI_DEVICE_NUM     128
 #define PCI_CONFIG_ADDRESS 0xCF8
 #define PCI_CONFIG_DATA    0xCFC
-#define PCI_DATA_NUM       0x10
+#define PCI_DATA_NUM       0x12
 #define PCI_BAR_NUM        6
 #define PCI_BITMASK_32     0xFFFFFFFF
 
@@ -33,7 +33,6 @@
 struct pci_bar {
 	union {
 		u32_t raw;
-		u32_t alt;
 		struct ioBAR {
 			u32_t setBit:1;
 			u32_t reserved:1;
@@ -46,6 +45,7 @@ struct pci_bar {
 			u32_t baseAddr:28;
 		} __attribute__((packed)) mem;
 	};
+	u32_t alt;
 	u32_t mask;
 } __attribute__((packed));
 
