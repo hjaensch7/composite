@@ -1,0 +1,1872 @@
+rm -f *.o
+rm -f *.out *.bin
+rm -f *.tmp
+# since we are just compiling we need to manually get the recipe.s file from app-tools
+# the app-tools/bake script looks for it.
+# This is kinda an out of place command. It uses the host computer's gcc
+# TODO, use composite toolchain gcc
+gcc -m32 -O3 -c -o recipe.o /home/vagrant/wheels/composite/src/components/extern/rk/build/rk_stub/../../rumprun/app-tools//i486-rumprun-netbsdelf-recipe.s
+/home/vagrant/wheels/composite/src/components/extern/rk/build/rk_stub/../../rumprun/app-tools//i486-rumprun-netbsdelf-gcc -O3 -m32 -c  -I../../../../implementation/no_interface/rumpbooter -I../../../../include -I../../../../../kernel/include/shared -I./include/ rk_stub.c
+/home/vagrant/wheels/composite/src/components/extern/rk/build/rk_stub/../../rumprun/app-tools//i486-rumprun-netbsdelf-ld -melf_i386 -r -o rk_stub.out *.o 
+/home/vagrant/wheels/composite/src/components/extern/rk/build/rk_stub/../../rumprun/app-tools//rumpbake paws rk_stub.bin rk_stub.out
+NO /dev/sdb: 
+RUNNING THE SYSTEM ON QEMU INSTEAD
+udpserv_rumpboot.sh
+System memory info from multiboot (end 0xc22bd000):
+	Modules:
+	- 0: [022be000, 0272a000) : 40800000-40803940 @ virtual address 40800000, _start = 40803940.
+	Memory regions:
+	- 0 (Available): [00000000, 0009fc00) sz = 0MB + 639KB
+	- 1 (Reserved ): [0009fc00, 000a0000) sz = 0MB + 1KB
+	- 2 (Reserved ): [000f0000, 00100000) sz = 0MB + 64KB
+	- 3 (Available): [00100000, 2ffe0000) sz = 766MB + 896KB
+	  memory usable at boot time: 2d8b6000 (728 MB + 728 KB)
+	- 4 (Reserved ): [2ffe0000, 30000000) sz = 0MB + 128KB
+	- 5 (Reserved ): [fffc0000, 100000000) sz = 0MB + 256KB
+	Amount of wasted memory due to layout is 0 MB + 0x0 B
+Processor information:
+	Vendor: GenuineIntel
+	Features [rdtsc fpu superpages sysenter/exit apic ]
+Initializing virtual memory
+	Setting up initial page directory.
+ACPI initialization
+	Found good RSDP @ c00f6460
+	Found good HPET @ f03e16b6
+Initializing HPET @ f03e16b6
+	Checksum is OK
+	Addr: 00000000fed00000
+	hpet: fed00000
+	Set HPET @ f0500000
+	Found good APIC @ f03e163e
+Initializing LAPIC @ f03e163e
+	MADT length 120 (base struct 44)
+	LAPIC found: coreid 0, apicid 0 flags 1
+	I/O APIC found: ioapicid 0, addr fec00000, int offset 0
+	Interrupt controller type 2: ignoring
+	Interrupt controller type 2: ignoring
+	Interrupt controller type 2: ignoring
+	Interrupt controller type 2: ignoring
+	Interrupt controller type 2: ignoring
+	Interrupt controller type 4: ignoring
+	APICs processed, 1 cores
+	Checksum is OK
+	lapic: fee00000
+	Set LAPIC @ f0a00000
+Setting up the booter component.
+range: 4636672
+	Creating 2 booter VM PTEs for PGD @ 0xc272d000 from [c22be000,c272a000) to [40800000,40c6c000).
+	Mapping in booter VM.
+range: 763334656
+	Creating 182 untyped memory PTEs for PGD @ 0xc011e000 from [c27e7000,effe0000) to [400000,2dbf9000).
+	Mapping in untyped memory.
+	Capability table and page-table created.
+	Created boot component structure from page-table and capability-table.
+	Creating initial threads, tcaps, and rcv end-points in boot-component.
+	Boot component initialization complete.
+LAPIC: TSC-Deadline Mode not supported! Configuring Oneshot Mode!
+Enabling timer @ f0500000 with tick granularity 10000 picoseconds
+Upcall into boot component at ip 0x40803940 for cpu: 0 with tid: 1
+------------------[ Kernel boot complete ]------------------
+(0,1,0) DBG:Booter for new kernel
+(0,1,0) DBG:num cobjs: 5
+(0,1,0) DBG:cobj capmgr:1 found at 0x408f2000:1d465, -> 44800000
+(0,1,0) DBG:cobj rumpcos:2 found at 0x4090f480:30e17a, -> 44c00000
+(0,1,0) DBG:cobj udpserv:3 found at 0x40c1d600:1e877, -> 45c00000
+(0,1,0) DBG:cobj boot:4 found at 0x40c3be80:1eb17, -> 46000000
+(0,1,0) DBG:cobj wheels:5 found at 0x40c5a9c0:ee41 -> 4a000000
+(0,1,0) DBG:Capability manager component[=1] found!
+(0,1,0) DBG:Root scheduler component[=4] found!
+(0,1,0) DBG:Comp 1 (capmgr) created @ 44800000!
+(0,1,0) DBG:Comp 2 (rumpcos) created @ 44c00000!
+(0,1,0) DBG:Comp 3 (udpserv) created @ 45c00000!
+(0,1,0) DBG:Comp 4 (boot) created @ 46000000!
+(0,1,0) DBG:Comp 5 (wheels) created @ 4a000000!
+(0,1,0) DBG:Comp 1 (capmgr) undefined symbols resolved!
+(0,1,0) DBG:Comp 2 (rumpcos) undefined symbols resolved!
+(0,1,0) DBG:Comp 3 (udpserv) undefined symbols resolved!
+(0,1,0) DBG:Comp 4 (boot) undefined symbols resolved!
+(0,1,0) DBG:Comp 5 (wheels) undefined symbols resolved!
+(0,1,0) DBG:Allocating 428 MB untyped memory to capability manager[=1]
+(0,1,0) DBG:Component 0 => child bitmap[0]: 0019 bitmap[1]: 0000
+(0,1,0) DBG:Component 1 => child bitmap[0]: 0000 bitmap[1]: 0000
+(0,1,0) DBG:Component 2 => child bitmap[0]: 0004 bitmap[1]: 0000
+(0,1,0) DBG:Component 3 => child bitmap[0]: 0000 bitmap[1]: 0000
+(0,1,0) DBG:Component 4 => child bitmap[0]: 0002 bitmap[1]: 0000
+(0,1,0) DBG:Component 5 => child bitmap[0]: 0000 bitmap[1]: 0000
+(0,1,0) DBG:Booter: done creating system.
+(0,1,0) DBG:********************************
+LAPIC: Timer calibrated - CPU Cycles to APIC Timer Ratio is 2
+Timer calibrated:
+	CPU cycles per HPET tick: 51
+	HPET ticks in 1000 us: 100000
+(0,2,1) DBG:CPU cycles per sec: 5200
+(0,2,1) DBG:Scheduler bitmap[0]: 10
+(0,2,1) DBG:Scheduler bitmap[1]: 0
+(0,2,1) DBG:Initialized CAPABILITY MANAGER
+(0,2,0) DBG:Component 1 initialized!
+(0,3,4) DBG:CPU cycles per sec: 5200
+(0,3,4) DBG:Initializing child component 2, is_sched=1
+(0,3,0) DBG:Component 4 initialized!
+(0,4,5) DBG:Wheels Spinning up
+Edianness: Little endian
+total pci device 6
+0:0.0 vendor 8086 device 1237 class 6
+0:1.0 vendor 8086 device 7000 class 6
+0:1.1 vendor 8086 device 7010 class 1
+0:1.3 vendor 8086 device 7113 class 6
+0:2.0 vendor 1234 device 1111 class 3
+0:3.0 vendor 1af4 device 1000 class 2
+(0,4,0) DBG:Component 5 initialized!
+(0,1,0) DBG:Booter: done initializing child components.
+(0,1,0) DBG:Root scheduler is 4, switching to it now!
+pre_syscall_default_setup...done
+syscall_emulation_setup
+Overriding syscall 4
+Overriding syscall 146
+Overriding syscall 54
+Overriding syscall 45
+Overriding syscall 90
+Overriding syscall 192
+Overriding syscall 91
+Overriding syscall 219
+Overriding syscall 163
+Overriding syscall 162
+Overriding syscall 175
+Overriding syscall 174
+Overriding syscall 125
+Overriding syscall 122
+Overriding syscall 224
+Overriding syscall 238
+Overriding syscall 243
+Overriding syscall 258
+Overriding syscall 120
+Overriding syscall 240
+libc_init
+cos_set_tid_address
+rumpkernel cos_init
+Fetching cap frontier from booter...spdid: 2
+done
+Fetching boot configuration information
+Greeting key: 
+Greeting value: 
+Setting up RK
+~~~~~ vmid: 0 ~~~~~
+
+RumpKernel Boot Start.
+bmk_memsize: 132120576
+
+Setting up arcv for hw irq
+Notifying parent scheduler...
+CONFIGURING RK TO RUN ON QEMU
+
+------------------[RK]------------------
+Rump Kernel bootstrap on platform Composite
+bmk_sched_init done
+bmk_memalloc_init done
+first page: 0x45079000
+Looking to get 16385 pages
+(0,8,4) DBG:SELF (inc. CHILD) INIT DONE.
+max: 0x4907a000
+(7): alloc_bitmap: 0x4507a000, 1
+(7): bitmap_size: 40960
+returned from bmk_pgalloc_loadmem
+cos_cpu_sched_create: thread->bt_name = main, f: 0x44c27cb0, in spdid: 2
+new thread id: 41
+(7): BMK_INTRLEVS: 1
+cos_cpu_sched_create: thread->bt_name = isrthr, f: 0x44c28820, in spdid: 2
+new thread id: 42
+=[1]=[2]=[3]=[4]=[5]=[6]=[7]=[8]=[9]=[10]=[11]=[12]=[13]=[14]=[15]=[16]=[17]=[18]=[19]=[20]=[21]=[22]=[23]=[24]=[25]=[26]=[27]=[28]=[29]=[30]=[31](41): Starting bmk_mainthread
+(41): cmdline: 
+{,"net":{,"if":"vioif0","type":"inet","method":"static","addr":"10.0.120.101","mask":"24",},"cmdline":"paws.bin",},(41): rumprun_boot
+(41): 
+
+bmk_current: 0x49079010
+(41): &bmk_current: 0x70000520
+(41): Entering rump_init
+(41): rump_init, vmid: 2
+(41): rumpuser_init
+(41): bmk_platform_clock_epochoffset is being called.
+Copyright (c) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
+    2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015
+    The NetBSD Foundation, Inc.  All rights reserved.
+Copyright (c) 1982, 1986, 1989, 1991, 1993
+    The Regents of the University of California.  All rights reserved.
+
+NetBSD 7.99.17 (RUMP-ROAST)
+total memory = 64384 KB
+timecounter: Timecounters tick every 10.000 msec
+timecounter: Timecounter "clockinterrupt" frequency 100 Hz quality 0
+cos_cpu_sched_create: thread->bt_name = rsi0/1, f: 0x44d9b510, in spdid: 2
+new thread id: 43
+cos_cpu_sched_create: thread->bt_name = sipbnc, f: 0x44d9b510, in spdid: 2
+new thread id: 44
+cos_cpu_sched_create: thread->bt_name = rsi0/2, f: 0x44d9b510, in spdid: 2
+new thread id: 45
+cos_cpu_sched_create: thread->bt_name = xcall/0, f: 0x44d9b510, in spdid: 2
+new thread id: 46
+cpu0 at thinair0: rump virtual cpu
+cos_cpu_sched_create: thread->bt_name = pdaemon, f: 0x44d9b510, in spdid: 2
+new thread id: 47
+cos_cpu_sched_create: thread->bt_name = cachegc, f: 0x44d9b510, in spdid: 2
+new thread id: 48
+root file system type: rumpfs
+kern.module.path=/stand/i386/7.99.17/modules
+cos_cpu_sched_create: thread->bt_name = unpgc, f: 0x44d9b510, in spdid: 2
+new thread id: 49
+cos_cpu_sched_create: thread->bt_name = rsi0/3, f: 0x44d9b510, in spdid: 2
+new thread id: 50
+(41): ----- Hello! Greetings from the tap source code! -----
+(41): ----- Attempting to make cnic device node /dev/cnic -----
+cos_cpu_sched_create: thread->bt_name = pmfevent, f: 0x44d9b510, in spdid: 2
+new thread id: 51
+cos_cpu_sched_create: thread->bt_name = pmfsuspend, f: 0x44d9b510, in spdid: 2
+new thread id: 52
+mainbus0 (root)
+pci0 at mainbus0 bus 0
+pci0: i/o space, memory space enabled, rd/line, rd/mult, wr/inv ok
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000100000011
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00001100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00000000
+rk called wheels_inl: CONFIG_DATA
+00010010001101111000000010000110
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000100000011
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00001100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00000000
+rk called wheels_inl: CONFIG_DATA
+00010010001101111000000010000110
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00001000
+rk called wheels_inl: CONFIG_DATA
+00000110000000000000000000000010
+Vendor Shift
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00010000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00010000
+rk called wheels_outl: CONFIG_DATA
+value 1|1111111bus11111111dev11111func111reg11111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00010000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00010000
+rk called wheels_outl: CONFIG_DATA
+value 0|0000000bus00000000dev00000func000reg00000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00010100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00010100
+rk called wheels_outl: CONFIG_DATA
+value 1|1111111bus11111111dev11111func111reg11111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00010100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00010100
+rk called wheels_outl: CONFIG_DATA
+value 0|0000000bus00000000dev00000func000reg00000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00011000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00011000
+rk called wheels_outl: CONFIG_DATA
+value 1|1111111bus11111111dev11111func111reg11111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00011000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00011000
+rk called wheels_outl: CONFIG_DATA
+value 0|0000000bus00000000dev00000func000reg00000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00011100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00011100
+rk called wheels_outl: CONFIG_DATA
+value 1|1111111bus11111111dev11111func111reg11111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00011100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00011100
+rk called wheels_outl: CONFIG_DATA
+value 0|0000000bus00000000dev00000func000reg00000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00100000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00100000
+rk called wheels_outl: CONFIG_DATA
+value 1|1111111bus11111111dev11111func111reg11111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00100000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00100000
+rk called wheels_outl: CONFIG_DATA
+value 0|0000000bus00000000dev00000func000reg00000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00100100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00100100
+rk called wheels_outl: CONFIG_DATA
+value 1|1111111bus11111111dev11111func111reg11111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00100100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00100100
+rk called wheels_outl: CONFIG_DATA
+value 0|0000000bus00000000dev00000func000reg00000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00111100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000100000011
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00000000
+rk called wheels_inl: CONFIG_DATA
+00010010001101111000000010000110
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000100000011
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00001000
+rk called wheels_inl: CONFIG_DATA
+00000110000000000000000000000010
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00001100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00010000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00010100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00011000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00011100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00100000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00100100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00101000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00101100
+rk called wheels_inl: CONFIG_DATA
+00010001000000000001101011110100
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00110000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00110100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00111000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00111100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00000func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000100000011
+vendor 8086 product 1237 (host bridge, revision 0x02) at pci0 dev 0 function 0 not configured
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+00000010000000000000000100000011
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00001100
+rk called wheels_inl: CONFIG_DATA
+00000000100000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00000000
+rk called wheels_inl: CONFIG_DATA
+01110000000000001000000010000110
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+00000010000000000000000100000011
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00001100
+rk called wheels_inl: CONFIG_DATA
+00000000100000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00000000
+rk called wheels_inl: CONFIG_DATA
+01110000000000001000000010000110
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00001000
+rk called wheels_inl: CONFIG_DATA
+00000110000000010000000000000000
+Vendor Shift
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00010000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00010000
+rk called wheels_outl: CONFIG_DATA
+value 1|1111111bus11111111dev11111func111reg11111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00010000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00010000
+rk called wheels_outl: CONFIG_DATA
+value 0|0000000bus00000000dev00000func000reg00000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00010100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00010100
+rk called wheels_outl: CONFIG_DATA
+value 1|1111111bus11111111dev11111func111reg11111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00010100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00010100
+rk called wheels_outl: CONFIG_DATA
+value 0|0000000bus00000000dev00000func000reg00000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00011000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00011000
+rk called wheels_outl: CONFIG_DATA
+value 1|1111111bus11111111dev11111func111reg11111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00011000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00011000
+rk called wheels_outl: CONFIG_DATA
+value 0|0000000bus00000000dev00000func000reg00000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00011100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00011100
+rk called wheels_outl: CONFIG_DATA
+value 1|1111111bus11111111dev11111func111reg11111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00011100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00011100
+rk called wheels_outl: CONFIG_DATA
+value 0|0000000bus00000000dev00000func000reg00000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00100000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00100000
+rk called wheels_outl: CONFIG_DATA
+value 1|1111111bus11111111dev11111func111reg11111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00100000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00100000
+rk called wheels_outl: CONFIG_DATA
+value 0|0000000bus00000000dev00000func000reg00000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00100100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00100100
+rk called wheels_outl: CONFIG_DATA
+value 1|1111111bus11111111dev11111func111reg11111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00100100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00100100
+rk called wheels_outl: CONFIG_DATA
+value 0|0000000bus00000000dev00000func000reg00000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00111100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+00000010000000000000000100000011
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00000000
+rk called wheels_inl: CONFIG_DATA
+01110000000000001000000010000110
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+00000010000000000000000100000011
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00001000
+rk called wheels_inl: CONFIG_DATA
+00000110000000010000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00001100
+rk called wheels_inl: CONFIG_DATA
+00000000100000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00010000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00010100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00011000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00011100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00100000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00100100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00101000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00101100
+rk called wheels_inl: CONFIG_DATA
+00010001000000000001101011110100
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00110000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00110100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00111000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00111100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+00000010000000000000000100000011
+vendor 8086 product 7000 (ISA bridge) at pci0 dev 1 function 0 not configured
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00000100
+rk called wheels_inl: CONFIG_DATA
+00000010100000000000000100000011
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00001100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00000000
+rk called wheels_inl: CONFIG_DATA
+01110000000100001000000010000110
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00001000
+rk called wheels_inl: CONFIG_DATA
+00000001000000011000000000000000
+Vendor Shift
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00010000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00010000
+rk called wheels_outl: CONFIG_DATA
+value 1|1111111bus11111111dev11111func111reg11111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00010000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00010000
+rk called wheels_outl: CONFIG_DATA
+value 0|0000000bus00000000dev00000func000reg00000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00010100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00010100
+rk called wheels_outl: CONFIG_DATA
+value 1|1111111bus11111111dev11111func111reg11111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00010100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00010100
+rk called wheels_outl: CONFIG_DATA
+value 0|0000000bus00000000dev00000func000reg00000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00011000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00011000
+rk called wheels_outl: CONFIG_DATA
+value 1|1111111bus11111111dev11111func111reg11111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00011000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00011000
+rk called wheels_outl: CONFIG_DATA
+value 0|0000000bus00000000dev00000func000reg00000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00011100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00011100
+rk called wheels_outl: CONFIG_DATA
+value 1|1111111bus11111111dev11111func111reg11111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00011100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00011100
+rk called wheels_outl: CONFIG_DATA
+value 0|0000000bus00000000dev00000func000reg00000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00100000
+rk called wheels_inl: CONFIG_DATA
+00000000000000001100000000100001
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00100000
+rk called wheels_outl: CONFIG_DATA
+value 1|1111111bus11111111dev11111func111reg11111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00100000
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111110001
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00100000
+rk called wheels_outl: CONFIG_DATA
+value 0|0000000bus00000000dev11000func000reg00100001
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00100100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00100100
+rk called wheels_outl: CONFIG_DATA
+value 1|1111111bus11111111dev11111func111reg11111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00100100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00100100
+rk called wheels_outl: CONFIG_DATA
+value 0|0000000bus00000000dev00000func000reg00000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00111100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00000100
+rk called wheels_inl: CONFIG_DATA
+00000010100000000000000100000011
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00000000
+rk called wheels_inl: CONFIG_DATA
+01110000000100001000000010000110
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00000100
+rk called wheels_inl: CONFIG_DATA
+00000010100000000000000100000011
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00001000
+rk called wheels_inl: CONFIG_DATA
+00000001000000011000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00001100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00010000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00010100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00011000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00011100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00100000
+rk called wheels_inl: CONFIG_DATA
+00000000000000001100000000100001
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00100100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00101000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00101100
+rk called wheels_inl: CONFIG_DATA
+00010001000000000001101011110100
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00110000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00110100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00111000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00111100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func001reg00000100
+rk called wheels_inl: CONFIG_DATA
+00000010100000000000000100000011
+vendor 8086 product 7010 (IDE mass storage, interface 0x80) at pci0 dev 1 function 1 not configured
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func010reg00000100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func010reg00001100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00000100
+rk called wheels_inl: CONFIG_DATA
+00000010100000000000000100000011
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00001100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00000000
+rk called wheels_inl: CONFIG_DATA
+01110001000100111000000010000110
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00001000
+rk called wheels_inl: CONFIG_DATA
+00000110100000000000000000000011
+Vendor Shift
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00010000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00010000
+rk called wheels_outl: CONFIG_DATA
+value 1|1111111bus11111111dev11111func111reg11111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00010000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00010000
+rk called wheels_outl: CONFIG_DATA
+value 0|0000000bus00000000dev00000func000reg00000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00010100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00010100
+rk called wheels_outl: CONFIG_DATA
+value 1|1111111bus11111111dev11111func111reg11111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00010100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00010100
+rk called wheels_outl: CONFIG_DATA
+value 0|0000000bus00000000dev00000func000reg00000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00011000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00011000
+rk called wheels_outl: CONFIG_DATA
+value 1|1111111bus11111111dev11111func111reg11111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00011000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00011000
+rk called wheels_outl: CONFIG_DATA
+value 0|0000000bus00000000dev00000func000reg00000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00011100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00011100
+rk called wheels_outl: CONFIG_DATA
+value 1|1111111bus11111111dev11111func111reg11111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00011100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00011100
+rk called wheels_outl: CONFIG_DATA
+value 0|0000000bus00000000dev00000func000reg00000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00100000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00100000
+rk called wheels_outl: CONFIG_DATA
+value 1|1111111bus11111111dev11111func111reg11111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00100000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00100000
+rk called wheels_outl: CONFIG_DATA
+value 0|0000000bus00000000dev00000func000reg00000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00100100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00100100
+rk called wheels_outl: CONFIG_DATA
+value 1|1111111bus11111111dev11111func111reg11111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00100100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00100100
+rk called wheels_outl: CONFIG_DATA
+value 0|0000000bus00000000dev00000func000reg00000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00111100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000100001001
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00000100
+rk called wheels_inl: CONFIG_DATA
+00000010100000000000000100000011
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00000000
+rk called wheels_inl: CONFIG_DATA
+01110001000100111000000010000110
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00000100
+rk called wheels_inl: CONFIG_DATA
+00000010100000000000000100000011
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00001000
+rk called wheels_inl: CONFIG_DATA
+00000110100000000000000000000011
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00001100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00010000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00010100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00011000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00011100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00100000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00100100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00101000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00101100
+rk called wheels_inl: CONFIG_DATA
+00010001000000000001101011110100
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00110000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00110100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00111000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00111100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000100001001
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func011reg00000100
+rk called wheels_inl: CONFIG_DATA
+00000010100000000000000100000011
+vendor 8086 product 7113 (miscellaneous bridge, revision 0x03) at pci0 dev 1 function 3 not configured
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func100reg00000100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func100reg00001100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func101reg00000100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func101reg00001100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func110reg00000100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func110reg00001100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func111reg00000100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00001func111reg00001100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000100000011
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00001100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00000000
+rk called wheels_inl: CONFIG_DATA
+00010001000100010001001000110100
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000100000011
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00001100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00000000
+rk called wheels_inl: CONFIG_DATA
+00010001000100010001001000110100
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00001000
+rk called wheels_inl: CONFIG_DATA
+00000011000000000000000000000010
+Vendor Shift
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00010000
+rk called wheels_inl: CONFIG_DATA
+11111101000000000000000000001000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00010000
+rk called wheels_outl: CONFIG_DATA
+value 1|1111111bus11111111dev11111func111reg11111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00010000
+rk called wheels_inl: CONFIG_DATA
+11111111000000000000000000001000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00010000
+rk called wheels_outl: CONFIG_DATA
+value 1|1111101bus00000000dev00000func000reg00001000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00010000
+rk called wheels_inl: CONFIG_DATA
+11111101000000000000000000001000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00010000
+rk called wheels_outl: CONFIG_DATA
+value 1|1111111bus11111111dev11111func111reg11111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00010000
+rk called wheels_inl: CONFIG_DATA
+11111111000000000000000000001000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00010000
+rk called wheels_outl: CONFIG_DATA
+value 1|1111101bus00000000dev00000func000reg00001000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00010100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00010100
+rk called wheels_outl: CONFIG_DATA
+value 1|1111111bus11111111dev11111func111reg11111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00010100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00010100
+rk called wheels_outl: CONFIG_DATA
+value 0|0000000bus00000000dev00000func000reg00000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00011000
+rk called wheels_inl: CONFIG_DATA
+11111110101111010000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00011000
+rk called wheels_outl: CONFIG_DATA
+value 1|1111111bus11111111dev11111func111reg11111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00011000
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00011000
+rk called wheels_outl: CONFIG_DATA
+value 1|1111110bus10111101dev00000func000reg00000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00011000
+rk called wheels_inl: CONFIG_DATA
+11111110101111010000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00011000
+rk called wheels_outl: CONFIG_DATA
+value 1|1111111bus11111111dev11111func111reg11111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00011000
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00011000
+rk called wheels_outl: CONFIG_DATA
+value 1|1111110bus10111101dev00000func000reg00000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00011100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00011100
+rk called wheels_outl: CONFIG_DATA
+value 1|1111111bus11111111dev11111func111reg11111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00011100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00011100
+rk called wheels_outl: CONFIG_DATA
+value 0|0000000bus00000000dev00000func000reg00000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00100000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00100000
+rk called wheels_outl: CONFIG_DATA
+value 1|1111111bus11111111dev11111func111reg11111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00100000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00100000
+rk called wheels_outl: CONFIG_DATA
+value 0|0000000bus00000000dev00000func000reg00000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00100100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00100100
+rk called wheels_outl: CONFIG_DATA
+value 1|1111111bus11111111dev11111func111reg11111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00100100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00100100
+rk called wheels_outl: CONFIG_DATA
+value 0|0000000bus00000000dev00000func000reg00000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00111100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000100000011
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00000000
+rk called wheels_inl: CONFIG_DATA
+00010001000100010001001000110100
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000100000011
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00001000
+rk called wheels_inl: CONFIG_DATA
+00000011000000000000000000000010
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00001100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00010000
+rk called wheels_inl: CONFIG_DATA
+11111101000000000000000000001000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00010100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00011000
+rk called wheels_inl: CONFIG_DATA
+11111110101111010000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00011100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00100000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00100100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00101000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00101100
+rk called wheels_inl: CONFIG_DATA
+00010001000000000001101011110100
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00110000
+rk called wheels_inl: CONFIG_DATA
+11111110101111000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00110100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00111000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00111100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00010func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000100000011
+vendor 1234 product 1111 (VGA display, revision 0x02) at pci0 dev 2 function 0 not configured
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+00000000000100000000000100000011
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00001100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00000000
+rk called wheels_inl: CONFIG_DATA
+00010000000000000001101011110100
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+00000000000100000000000100000011
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00001100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00000000
+rk called wheels_inl: CONFIG_DATA
+00010000000000000001101011110100
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00001000
+rk called wheels_inl: CONFIG_DATA
+00000010000000000000000000000000
+Vendor Shift
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00010000
+rk called wheels_inl: CONFIG_DATA
+00000000000000001100000000000001
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00010000
+rk called wheels_outl: CONFIG_DATA
+value 1|1111111bus11111111dev11111func111reg11111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00010000
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111100001
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00010000
+rk called wheels_outl: CONFIG_DATA
+value 0|0000000bus00000000dev11000func000reg00000001
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00010100
+rk called wheels_inl: CONFIG_DATA
+11111110101111010001000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00010100
+rk called wheels_outl: CONFIG_DATA
+value 1|1111111bus11111111dev11111func111reg11111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00010100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00010100
+rk called wheels_outl: CONFIG_DATA
+value 1|1111110bus10111101dev00010func000reg00000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00010100
+rk called wheels_inl: CONFIG_DATA
+11111110101111010001000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00010100
+rk called wheels_outl: CONFIG_DATA
+value 1|1111111bus11111111dev11111func111reg11111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00010100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00010100
+rk called wheels_outl: CONFIG_DATA
+value 1|1111110bus10111101dev00010func000reg00000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00011000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00011000
+rk called wheels_outl: CONFIG_DATA
+value 1|1111111bus11111111dev11111func111reg11111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00011000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00011000
+rk called wheels_outl: CONFIG_DATA
+value 0|0000000bus00000000dev00000func000reg00000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00011100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00011100
+rk called wheels_outl: CONFIG_DATA
+value 1|1111111bus11111111dev11111func111reg11111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00011100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00011100
+rk called wheels_outl: CONFIG_DATA
+value 0|0000000bus00000000dev00000func000reg00000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00100000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00100000
+rk called wheels_outl: CONFIG_DATA
+value 1|1111111bus11111111dev11111func111reg11111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00100000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00100000
+rk called wheels_outl: CONFIG_DATA
+value 0|0000000bus00000000dev00000func000reg00000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00100100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00100100
+rk called wheels_outl: CONFIG_DATA
+value 1|1111111bus11111111dev11111func111reg11111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00100100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00100100
+rk called wheels_outl: CONFIG_DATA
+value 0|0000000bus00000000dev00000func000reg00000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00111100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000100001011
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+00000000000100000000000100000011
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00001100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00110100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000001000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg01000000
+rk called wheels_inl: CONFIG_DATA
+00000000000000100000000000010001
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00000000
+rk called wheels_inl: CONFIG_DATA
+00010000000000000001101011110100
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+00000000000100000000000100000011
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00001000
+rk called wheels_inl: CONFIG_DATA
+00000010000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00001100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00010000
+rk called wheels_inl: CONFIG_DATA
+00000000000000001100000000000001
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00010100
+rk called wheels_inl: CONFIG_DATA
+11111110101111010001000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00011000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00011100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00100000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00100100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00101000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00101100
+rk called wheels_inl: CONFIG_DATA
+00000000000000010001101011110100
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00110000
+rk called wheels_inl: CONFIG_DATA
+11111110101110000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00110100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000001000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00111000
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00111100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000100001011
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+00000000000100000000000100000011
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00001100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000000000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00110100
+rk called wheels_inl: CONFIG_DATA
+00000000000000000000000001000000
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg01000000
+rk called wheels_inl: CONFIG_DATA
+00000000000000100000000000010001
+virtio0 at pci0 dev 3 function 0
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00101100
+rk called wheels_inl: CONFIG_DATA
+00000000000000010001101011110100
+virtio0: Virtio Network Device (rev. 0x00)
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00010000
+rk called wheels_inl: CONFIG_DATA
+00000000000000001100000000000001
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00010000
+rk called wheels_outl: CONFIG_DATA
+value 1|1111111bus11111111dev11111func111reg11111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00010000
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111100001
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00011func000reg00010000
+rk called wheels_outl: CONFIG_DATA
+value 0|0000000bus00000000dev11000func000reg00000001
+vioif0 at virtio0: Ethernet address 52:54:00:12:34:56
+virtio0: allocated 20480 byte for virtqueue 0 for rx, size 256
+virtio0: using 8192 byte (512 entries) indirect descriptors
+virtio0: allocated 81920 byte for virtqueue 1 for tx, size 256
+virtio0: using 69632 byte (4352 entries) indirect descriptors
+virtio0: allocated 8192 byte for virtqueue 2 for control, size 64
+virtio0: interrupting at pausebreak
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00100func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00100func000reg00001100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00101func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00101func000reg00001100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00110func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00110func000reg00001100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00111func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev00111func000reg00001100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev01000func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev01000func000reg00001100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev01001func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev01001func000reg00001100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev01010func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev01010func000reg00001100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev01011func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev01011func000reg00001100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev01100func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev01100func000reg00001100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev01101func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev01101func000reg00001100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev01110func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev01110func000reg00001100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev01111func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev01111func000reg00001100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev10000func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev10000func000reg00001100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev10001func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev10001func000reg00001100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev10010func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev10010func000reg00001100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev10011func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev10011func000reg00001100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev10100func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev10100func000reg00001100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev10101func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev10101func000reg00001100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev10110func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev10110func000reg00001100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev10111func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev10111func000reg00001100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev11000func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev11000func000reg00001100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev11001func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev11001func000reg00001100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev11010func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev11010func000reg00001100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev11011func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev11011func000reg00001100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev11100func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev11100func000reg00001100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev11101func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev11101func000reg00001100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev11110func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev11110func000reg00001100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev11111func000reg00000100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+rk called wheels_outl: CONFIG_ADDRESS
+value 1|0000000bus00000000dev11111func000reg00001100
+rk called wheels_inl: CONFIG_DATA
+11111111111111111111111111111111
+cos_cpu_sched_create: thread->bt_name = configroot, f: 0x44d9b510, in spdid: 2
+new thread id: 53
+cos_cpu_sched_create: thread->bt_name = configroot, f: 0x44d9b510, in spdid: 2
+new thread id: 54
+cos_cpu_sched_create: thread->bt_name = aiodoned, f: 0x44d9b510, in spdid: 2
+new thread id: 55
+cos_cpu_sched_create: thread->bt_name = vmem_rehash, f: 0x44d9b510, in spdid: 2
+new thread id: 56
+(41): Exit rump_init
+(41): Mounting temporary filesystem
+(41): Done Mounting temporary filesystem
+(41): Rumprun_lwp_init
+(41): Exiting rumprun_lwp_init
+(41): fn: 0x44e0c8e0
+(41): Exiting _netbsd_userlevel_init
+mounted tmpfs on /tmp
+(41): Setting up rump server
+IN RK, mmap
+addr: 0x0, len: 135168, prot: 3, flags: 4098, fd: -1, off: 0
+MAP_PRIVATE|MAP_ANONYMOUS: 4098
+creating lwp1 thread..
+cos_cpu_sched_create: thread->bt_name = lwp1, f: 0x44da4240, in spdid: 2
+new thread id: 57
+(41): Done setting up rump server
+(41): Make /dev/paws device
+/dev/paws: hostpath paws (512 KB)
+(41): Parsing cmdline for RK2: {,"net":{,"if":"vioif0","type":"inet","method":"static","addr":"10.0.120.101","mask":"24",},"cmdline":(41): Done parsing cmdline
+
+__________________rumprun_________________
+pthread_create
+IN RK, mmap
+addr: 0x0, len: 135168, prot: 3, flags: 4098, fd: -1, off: 0
+MAP_PRIVATE|MAP_ANONYMOUS: 4098
+creating user_lwp thread..
+cos_cpu_sched_create: thread->bt_name = user_lwp, f: 0x44da4240, in spdid: 2
+new thread id: 58
+pthread_create done
+pre_syscall_default_setup...cos: cap 4 not found!
+done
+syscall_emulation_setup
+Overriding syscall 4
+Overriding syscall 146
+Overriding syscall 54
+Overriding syscall 45
+Overriding syscall 90
+Overriding syscall 192
+Overriding syscall 91
+Overriding syscall 219
+Overriding syscall 163
+Overriding syscall 162
+Overriding syscall 175
+Overriding syscall 174
+Overriding syscall 125
+Overriding syscall 122
+Overriding syscall 224
+Overriding syscall 238
+Overriding syscall 243
+Overriding syscall 258
+Overriding syscall 120
+Overriding syscall 240
+libc_init
+cos_set_tid_address
+Welcome to the udpserver component
+cos_component_information spdid: 3
+calling rk_inv_entry
+
+*** KERNEL COMPONENT ***
+ 	Arguments: 0, 1, 2, 3
+spdid: 3
+*** KERNEL COMPONENT RETURNING ***
+
+Overriding syscall 102
+Overriding syscall 90
+Overriding syscall 192
+Overriding syscall 4
+Overriding syscall 3
+Overriding syscall 5
+Overriding syscall 10
+Overriding syscall 265
+Overriding syscall 142
+Overriding syscall 194
+Starting udp-server [in:9998 out:9999]
+Sending to port 9999
+RK socket
+fd for socket: 4
+RK socket
+fd for receive socket: 5
+binding receive socket to port 9998
+RK bind
+RK recvfrom
+Break
+Shutting down...
+QEMU: Terminated
+

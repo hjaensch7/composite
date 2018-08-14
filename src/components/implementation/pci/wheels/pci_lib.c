@@ -45,6 +45,31 @@ cos_pci_print(void)
     }
 }
 
+
+u32_t
+get_raw_bar(u32_t bus, u32_t dev, u32_t func, int reg)
+{
+	for(int i=0; i < PCI_DEVICE_NUM; i++) {
+		if(devices[i].bus == bus)
+			if(devices[i].dev == dev)
+				if(devices[i].func == func)
+					return devices[i].bar[reg-4].raw;
+	}
+	return 0;
+}
+
+u32_t
+get_alt_bar(u32_t bus, u32_t dev, u32_t func, int reg)
+{
+	for(int i=0; i < PCI_DEVICE_NUM; i++) {
+		if(devices[i].bus == bus)
+			if(devices[i].dev == dev)
+				if(devices[i].func == func)
+					return devices[i].bar[reg-4].alt;
+	}
+	return 0;
+}
+
 u32_t
 get_config_data(u32_t bus, u32_t dev, u32_t func, int reg)
 {
@@ -96,7 +121,12 @@ cos_pci_scan(void)
 				devices[dev_num].subclass  = (u8_t)PCI_SUBCLASS_ID(devices[dev_num].data[2]);
 				devices[dev_num].progIF    = (u8_t)PCI_PROG_IF(devices[dev_num].data[2]);
 				devices[dev_num].header    = (u8_t)PCI_HEADER(devices[dev_num].data[3]);
-				for(k=0; k<PCI_BAR_NUM; k++) devices[dev_num].bar[k].raw = devices[dev_num].data[4+k];
+				for(k=0; k<PCI_BAR_NUM; k++) {
+						devices[dev_num].bar[k].raw = devices[dev_num].data[4+k];
+						cos_pci_write_config(devices[dev_num].bus, devices[dev_num].dev, devices[dev_num].func, ((4+k) << 2), PCI_BITMASK_32);
+						devices[dev_num].bar[k].alt = cos_pci_read_config(devices[dev_num].bus, devices[dev_num].dev, devices[dev_num].func, ((4+k) << 2));
+						cos_pci_write_config(devices[dev_num].bus, devices[dev_num].dev, devices[dev_num].func, ((4+k) << 2), devices[dev_num].bar[k].raw);
+				}
 				dev_num++;
 			}
 		}

@@ -6,6 +6,7 @@
 #include "cos_pci.h"
 
 u32_t addr;
+int BAR_conf = 0; //Bool 1 = attempting bar config, 0 = not
 
 void
 print_bits(unsigned int num)
@@ -19,7 +20,6 @@ print_bits(unsigned int num)
 	printc("\n");
 	return;
 }
-
 
 void
 print_addr_bits(unsigned int num)
@@ -71,53 +71,55 @@ unpack_addr(unsigned int addr, unsigned *bus, unsigned *dev, unsigned *fun, unsi
 	*reg = shift(addr, 6, 2);
 }
 
+int
+dev_exists(unsigned bus, unsigned dev, unsigned fun)
+{
+	if(0 == get_config_data(bus, dev, fun, 1))
+		return 0;
+	else
+		return 1;
+}
 
-void
-print_port(int port)
+int
+is_bar(unsigned int addr)
 {
-	if(port == 3320){
-		printc("CONFIG_ADDRESS\n");
-	}else{
-		printc("CONFIG_DATA\n");
-	}
+	if(shift(addr, 6, 2) >= 4 && shift(addr, 6, 2) <= 9)
+		return 1;
+	else
+		return 0;
 }
-/*
-void
-parse_outl(unsigned int addr)
-{
-	printc("Parsing Request:\n");
-//	Print below prints sorted bits
-//	print_addr_bits(addr);
-	unsigned bus, dev, fun, reg;
-	unpack_addr(addr, &bus, &dev, &fun, &reg);
-	printc("reg: %d fun: %d dev: %d bus: %d\n", reg, fun, dev, bus);
-	printc("config_data: ");
-	print_bits(get_config_data(bus, dev, fun, reg));
-}
-*/
 
 void
 wheels_outl(unsigned short port, unsigned int value)
 {
-	printc("rk called %s: ", __func__);
-	print_port(port);
 	addr = value;
+	if (value == PCI_BITMASK_32){ //this should be casting then comparison
+		BAR_conf = 1;
+	}
 }
 
 unsigned int
 wheels_inl(unsigned short port)
 {
-	printc("rk called %s: ", __func__);
-	print_port(port);
 	//Unpacking Address
 	unsigned bus, dev, fun, reg;
 	unpack_addr(addr, &bus, &dev, &fun, &reg);
 	printc("bus: %d dev: %d fun: %d reg: %d\n", bus, dev, fun, reg<<2);
+
 	//Searching for config data
 	printc("cos data: ");
-	u32_t data = get_config_data(bus, dev, fun, reg);
-	print_bits(data);
+	u32_t data = PCI_BITMASK_32;
+	if(!dev_exists(bus, dev, fun))
+		return data;
 
+	if (BAR_conf == 1 && is_bar(addr)){ //Getting size of mapped memory
+		data = get_alt_bar(bus, dev, fun, reg);
+		BAR_conf = 0;
+	}else if(is_bar(addr)) //Getting address of mapped memory
+		data = get_raw_bar(bus, dev, fun, reg);
+	else
+		data = get_config_data(bus, dev, fun, reg); //Standard config register
+	print_bits(data);
 	return data;
 }
 

@@ -33,6 +33,7 @@
 struct pci_bar {
 	union {
 		u32_t raw;
+		u32_t alt;
 		struct ioBAR {
 			u32_t setBit:1;
 			u32_t reserved:1;
@@ -71,6 +72,7 @@ u32_t cos_pci_read_config(u32_t bus, u32_t dev, u32_t func, u32_t reg);
 void cos_pci_write_config(u32_t bus, u32_t dev, u32_t func, u32_t reg, u32_t v);
 void *cos_map_virt_to_phys(void *addr);
 u32_t get_config_data(u32_t bus, u32_t dev, u32_t func, int reg);
-
+u32_t get_alt_bar(u32_t bus, u32_t dev, u32_t func, int reg);
+u32_t get_raw_bar(u32_t bus, u32_t dev, u32_t func, int reg);
 #endif /* PCI_H */
 
